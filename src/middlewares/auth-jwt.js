@@ -1,7 +1,8 @@
-import { env } from "../config.js";
+import jwt from "jsonwebtoken";
+import { env } from "../config/env.js";
 
 export function authJwt(req, res, next) {
-	const token_field = req.headers.Authorization;
+	const token_field = req.headers.authorization;
 	if (!token_field) {
 		return res.status(403).send({ message: "No token provided!" });
 	}
