@@ -16,6 +16,11 @@ services:
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
+    develop:
+      watch:
+        - path: ./src
+          target: /app/src
+          action: sync+restart
     environment:
       DATABASE_URL: "mysql://root:root@database:3306/tripwise"
     depends_on:
