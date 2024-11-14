@@ -3,6 +3,7 @@ const express = require("express");
 const { z } = require("zod");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const { env } = require("./config");
 
 const prisma = new PrismaClient();
 const app = express();
@@ -102,7 +103,7 @@ app.post("/login", async (req, res) => {
 		{
 			email: customer.email,
 		},
-		"aaaa",
+		env.JWT_SECRET,
 		{
 			expiresIn: "1h",
 			subject: String(customer.id),
