@@ -3,9 +3,13 @@ services:
     image: bitnami/mysql
     ports:
       - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 10s
+      retries: 10
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: database
+      MYSQL_DATABASE: tripwise
   api:
     build:
       context: .
@@ -13,7 +17,8 @@ services:
     ports:
       - "3000:3000"
     environment:
-      DATABASE_URL: "mysql://root:root@database:3306/database"
+      DATABASE_URL: "mysql://root:root@database:3306/tripwise"
     depends_on:
-      - database
+      database:
+        condition: service_healthy
     

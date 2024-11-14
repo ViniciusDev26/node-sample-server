@@ -11,12 +11,101 @@ datasource db {
 }
 
 model Customer {
-  id       String @id @default(cuid())
+  id       Int       @id @default(autoincrement())
   name     String
-  email    String @unique
+  email    String    @unique
   phone    String
   address  String
   password String
+  Service  Service[]
 
   @@map("customers")
+}
+
+model Service {
+  id              Int              @id @default(autoincrement())
+  name            String
+  description     String
+  price           Float
+  date_offer_init DateTime
+  date_offer_end  DateTime
+  date_selected   DateTime?
+  available       Boolean          @default(true)
+  location        String
+  duration        Float
+  capacity        Int
+  category        SERVICE_CATEGORY
+  customer_id     Int
+
+  customer  Customer    @relation(fields: [customer_id], references: [id])
+  Purchase  Purchase[]
+  Moviments Moviments[]
+
+  @@map("services")
+}
+
+model Payment {
+  id       Int            @id @default(autoincrement())
+  type     PAYMENT_METHOD
+  status   PAYMENT_STATUS @default(PENDING)
+  Purchase Purchase[]
+
+  @@map("payments")
+}
+
+model Purchase {
+  id         Int             @id @default(autoincrement())
+  service_id Int
+  payment_id Int
+  total      Float
+  status     PURCHASE_STATUS @default(PENDING)
+
+  service Service @relation(fields: [service_id], references: [id])
+  payment Payment @relation(fields: [payment_id], references: [id])
+
+  @@map("purchases")
+}
+
+model Moviments {
+  id         Int            @id @default(autoincrement())
+  service_id Int
+  date       DateTime
+  type       MOVIMENTS_TYPE
+  notes      String
+
+  service Service @relation(fields: [service_id], references: [id])
+
+  @@map("moviments")
+}
+
+enum MOVIMENTS_TYPE {
+  RESERVATION
+  CANCELATION
+  UPDATE
+}
+
+enum PURCHASE_STATUS {
+  PENDING
+  CONFIRMED
+  CANCELED
+}
+
+enum PAYMENT_METHOD {
+  CARD
+  PIX
+  PAYPAL
+  TICKET
+}
+
+enum PAYMENT_STATUS {
+  PENDING
+  PAID
+  FAILED
+}
+
+enum SERVICE_CATEGORY {
+  ADVENTURE
+  CULTURE
+  FAMILY
+  GASTRONOMY
 }
