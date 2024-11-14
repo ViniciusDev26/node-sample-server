@@ -1,0 +1,24 @@
+{
+	"name": "test",
+	"version": "1.0.0",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"dev": "node --watch src/index.js",
+		"prestart": "prisma generate && prisma migrate deploy",
+		"start": "node src/index.js"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"description": "",
+	"dependencies": {
+		"@prisma/client": "^5.22.0",
+		"bcryptjs": "^2.4.3",
+		"express": "^4.21.1",
+		"zod": "^3.23.8"
+	},
+	"devDependencies": {
+		"prisma": "^5.22.0"
+	}
+}
