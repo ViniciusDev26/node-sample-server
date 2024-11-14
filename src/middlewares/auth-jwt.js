@@ -1,4 +1,4 @@
-import { env } from "../config";
+import { env } from "../config.js";
 
 export function authJwt(req, res, next) {
 	const token_field = req.headers.Authorization;

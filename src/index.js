@@ -1,14 +1,15 @@
-const { PrismaClient } = require("@prisma/client");
-const express = require("express");
-const { z } = require("zod");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const { env } = require("./config");
+import { PrismaClient } from "@prisma/client";
+import * as bcrypt from "bcryptjs";
+import express, { json } from "express";
+import jwt from "jsonwebtoken";
+import { z } from "zod";
+import { env } from "./config.js";
+import { authJwt } from "./middlewares/auth-jwt.js";
 
 const prisma = new PrismaClient();
 const app = express();
 
-app.use(express.json());
+app.use(json());
 
 app.post("/customer", async (req, res) => {
 	// Validate Request Body
@@ -41,7 +42,7 @@ app.post("/customer", async (req, res) => {
 	res.json(customer);
 });
 
-app.get("/customer", async (req, res) => {
+app.get("/customer", authJwt, async (req, res) => {
 	// no show customer password
 	const customers = await prisma.customer.findMany({
 		select: {

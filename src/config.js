@@ -1,4 +1,4 @@
-const { z } = require("zod");
+import { z } from "zod";
 
 const env_schema = z.object({
 	JWT_SECRET: z.string(),
